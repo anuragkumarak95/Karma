@@ -15,10 +15,14 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -84,13 +88,13 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
+
         //put create new task functionality.
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(MainActivity.this,TaskPage.class));
             }
         });
 
@@ -108,14 +112,10 @@ public class MainActivity extends AppCompatActivity
         listViewTaskList.setHasFixedSize(false);
         listViewTaskList.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
         listViewTaskList.setItemAnimator(new DefaultItemAnimator());
-        TaskListRecyclerAdapter taskListAdapter = new TaskListRecyclerAdapter(getApplicationContext(),taskArrayList);
+        TaskListRecyclerAdapter taskListAdapter = new TaskListRecyclerAdapter(this,taskArrayList);
         listViewTaskList.setAdapter(taskListAdapter);
 
-        //Changing NavBar Content Dynamically.
-        textViewNavMain = (TextView) findViewById(R.id.textViewNavMain);
-        textViewNavMain.setText("Anurag Kumar");
-        textViewNavAlter = (TextView) findViewById(R.id.textViewNavAlter);
-        textViewNavAlter.setText("anuragkumarak95@gmail.com");
+        getWindow().setExitTransition(new Explode().excludeTarget(R.id.toolbar,true));
 
     }
 
@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
 
             startActivity(new Intent(MainActivity.this,Login_signup.class));
+
 
         } else if (id == R.id.nav_share) {
 

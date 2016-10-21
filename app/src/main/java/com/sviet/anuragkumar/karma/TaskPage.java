@@ -12,8 +12,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.transition.Transition;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -42,18 +44,48 @@ public class TaskPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         setContentView(R.layout.activity_task_page);
+        super.onCreate(savedInstanceState);
+        recyclerViewTaskPage = (RecyclerView) findViewById(R.id.listViewTaskPage);
+        recyclerViewTaskPage.setVisibility(View.INVISIBLE);
+
+        final Transition fade = getWindow().getEnterTransition();
+        fade.addListener(new Transition.TransitionListener() {
+
+            @Override
+            public void onTransitionStart(Transition transition) {
+
+            }
+
+            @Override
+            public void onTransitionEnd(Transition transition) {
+                recyclerViewTaskPage.setVisibility(View.VISIBLE);
+                fade.removeListener(this);
+            }
+
+            @Override
+            public void onTransitionCancel(Transition transition) {
+
+            }
+
+            @Override
+            public void onTransitionPause(Transition transition) {
+
+            }
+
+            @Override
+            public void onTransitionResume(Transition transition) {
+
+            }
+        });
 
         final TextView txtTitle = (TextView) findViewById(R.id.editTextTitle);
-        List<String> str_data = new ArrayList<>();
-
-        recyclerViewTaskPage = (RecyclerView) findViewById(R.id.listViewTaskPage);
+        
         Bundle extras = getIntent().getExtras();
         if(extras!=null){
             String taskStr = extras.getString("task");
             Task task = new Gson().fromJson(taskStr,Task.class);
 
             //setting title for Task
-
             txtTitle.setText(task.getTitle());
 
             //setting Color of the Task.
@@ -63,9 +95,10 @@ public class TaskPage extends AppCompatActivity {
             relativeLayout.setBackgroundColor(Color.parseColor("#"+task.getColor()));
             Window window = this.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
+            //used to give custom color to the notification bar.
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(Color.parseColor("#"+task.getColor()));
+
 
             //adapting the unit Tasks of Task.
             recyclerViewTaskPage.setHasFixedSize(true);
@@ -74,7 +107,7 @@ public class TaskPage extends AppCompatActivity {
             recyclerViewTaskPage.setAdapter(taskPageRecyclerAdapter);
         }
 
-        super.onCreate(savedInstanceState);
+
     }
 
     @Override

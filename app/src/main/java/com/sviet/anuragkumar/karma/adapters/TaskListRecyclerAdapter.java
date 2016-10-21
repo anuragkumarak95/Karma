@@ -1,9 +1,12 @@
 package com.sviet.anuragkumar.karma.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -82,10 +85,17 @@ public class TaskListRecyclerAdapter extends RecyclerView.Adapter<TaskListRecycl
                     Intent intent = new Intent(context, TaskPage.class);
                     intent.putExtra("task",new Gson().toJson(taskArrayList.get(getAdapterPosition())));
 
+                    Pair<View , String> p1 = Pair.create((View)textViewTitle,"titleTrans")
+                                       ,p2 = Pair.create((View)textViewHint,"taskCard");
+                    ActivityOptionsCompat options = ActivityOptionsCompat.
+                            makeSceneTransitionAnimation((Activity) context,p1,p2);
+
                     //used for firing intent from outside of the activity.
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                    context.startActivity(intent);
+                    //convert context to activity to get all activity functions.
+                    Activity activity = (Activity) context;
+                    activity.startActivity(intent,options.toBundle());
+                    //activity.overridePendingTransition();
                 }
             });
 
