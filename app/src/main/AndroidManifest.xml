@@ -22,10 +22,12 @@
         <activity
             android:name=".expo.AppBarPractice"
             android:label="@string/title_activity_app_bar_practice"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-        <activity android:name=".TaskPage"
-           />
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".TaskPage" />
+        <activity
+            android:name=".LeaderBoard"
+            android:label="@string/title_activity_leader_board"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
